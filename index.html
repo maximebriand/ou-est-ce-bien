@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trouvimmo — Retrouvez l'adresse exacte de n'importe quelle annonce immobilière</title>
+    <meta name="description" content="Extension Chrome qui retrouve l'adresse exacte d'un bien immobilier à partir de son DPE. Compatible Leboncoin, SeLoger, Bien'ici, PAP.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #FAFAF8;
+            --surface: #FFFFFF;
+            --text: #1A1A18;
+            --text-secondary: #6B6B64;
+            --accent: #2D6A4F;
+            --accent-light: #40916C;
+            --accent-bg: #D8F3DC;
+            --accent-bg-subtle: #F0FAF2;
+            --border: #E8E8E2;
+            --dpe-a: #319834;
+            --dpe-b: #33CC31;
+            --dpe-c: #CBFC34;
+            --dpe-d: #FBEA38;
+            --dpe-e: #FCCC2F;
+            --dpe-f: #F4811F;
+            --dpe-g: #EE1D23;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(250, 250, 248, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            font-size: 1.35rem;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .nav-cta {
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-cta:hover { background: var(--accent-light); transform: translateY(-1px); }
+
+        /* HERO */
+        .hero {
+            padding: 160px 32px 100px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-bg);
+            color: var(--accent);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 32px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2.4rem, 5vw, 3.6rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+            animation: fadeUp 0.6s 0.1s ease both;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 580px;
+            margin: 0 auto 40px;
+            animation: fadeUp 0.6s 0.2s ease both;
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            animation: fadeUp 0.6s 0.3s ease both;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s;
+            box-shadow: 0 4px 16px rgba(45, 106, 79, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(45, 106, 79, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            border: 1.5px solid var(--border);
+            transition: all 0.25s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text);
+            background: var(--surface);
+        }
+
+        /* DEMO VISUAL */
+        .demo-section {
+            max-width: 960px;
+            margin: 0 auto 120px;
+            padding: 0 32px;
+            animation: fadeUp 0.8s 0.4s ease both;
+        }
+
+        .demo-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .demo-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #F8F8F6;
+        }
+
+        .demo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        .demo-dot:nth-child(1) { background: #FF6058; }
+        .demo-dot:nth-child(2) { background: #FFC02F; }
+        .demo-dot:nth-child(3) { background: #27CA40; }
+
+        .demo-url {
+            flex: 1;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .demo-body {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            min-height: 380px;
+        }
+
+        .demo-annonce {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .demo-annonce-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .demo-annonce-price {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .demo-criteria {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .demo-tag {
+            background: #F3F3EE;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .demo-dpe {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .dpe-bar {
+            height: 26px;
+            border-radius: 4px 14px 14px 4px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.75rem;
+            position: relative;
+            opacity: 0.4;
+            transition: all 0.3s;
+        }
+
+        .dpe-bar.active {
+            opacity: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .dpe-bar.active::after {
+            content: '◄';
+            position: absolute;
+            right: -20px;
+            color: var(--text);
+            font-size: 0.7rem;
+        }
+
+        .dpe-a { background: var(--dpe-a); width: 30%; }
+        .dpe-b { background: var(--dpe-b); width: 38%; }
+        .dpe-c { background: var(--dpe-c); width: 46%; color: #333; }
+        .dpe-d { background: var(--dpe-d); width: 54%; color: #333; }
+        .dpe-e { background: var(--dpe-e); width: 62%; color: #333; }
+        .dpe-f { background: var(--dpe-f); width: 72%; }
+        .dpe-g { background: var(--dpe-g); width: 82%; }
+
+        /* Side panel result */
+        .demo-panel {
+            background: var(--accent-bg-subtle);
+            border-left: 1px solid var(--border);
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .demo-panel-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .confidence-badge {
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .demo-result-address {
+            font-family: 'Fraunces', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .demo-result-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .demo-result-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .demo-result-label { color: var(--text-secondary); }
+        .demo-result-value { font-weight: 600; }
+
+        .demo-result-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .demo-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: 500;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .demo-link:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* HOW IT WORKS */
+        .section {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 32px 120px;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .section h2 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            font-weight: 700;
+            margin-bottom: 56px;
+            line-height: 1.2;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--accent-bg);
+            color: var(--accent);
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        /* SITES */
+        .sites-grid {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-top: 48px;
+        }
+
+        .site-badge {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 28px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* PRICING */
+        .pricing-card {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--surface);
+            border: 2px solid var(--accent);
+            border-radius: var(--radius-lg);
+            padding: 48px 40px;
+            text-align: center;
+            box-shadow: var(--shadow-lg), 0 0 0 6px var(--accent-bg);
+            position: relative;
+        }
+
+        .pricing-popular {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        .pricing-free {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .pricing-free strong { color: var(--text); }
+
+        .pricing-price {
+            font-family: 'Fraunces', serif;
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .pricing-period {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            display: block;
+            text-align: center;
+        }
+
+        .pricing-note {
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* FAQ */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .faq-item {
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .faq-item:first-child { border-radius: var(--radius) var(--radius) 4px 4px; }
+        .faq-item:last-child { border-radius: 4px 4px var(--radius) var(--radius); }
+
+        .faq-question {
+            width: 100%;
+            border: none;
+            background: none;
+            text-align: left;
+            padding: 22px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text);
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover { background: var(--accent-bg-subtle); }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            transition: transform 0.3s;
+            font-weight: 300;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+        }
+
+        .faq-answer-inner {
+            padding: 0 28px 22px;
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.7;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 48px 32px;
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text); }
+
+        .footer-copy {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: all 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            nav { padding: 12px 20px; }
+            .hero { padding: 130px 20px 80px; }
+            .demo-body { grid-template-columns: 1fr; }
+            .demo-panel { border-left: none; border-top: 1px solid var(--border); }
+            .steps { grid-template-columns: 1fr; gap: 40px; }
+            .section { padding: 0 20px 80px; }
+            .pricing-card { padding: 40px 28px; }
+            .footer-inner { flex-direction: column; text-align: center; }
+            .demo-section { padding: 0 16px 80px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">📍</div>
+            Trouvimmo
+        </a>
+        <a href="#pricing" class="nav-cta">Installer l'extension</a>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge">🔍 Extension Chrome gratuite</div>
+        <h1>L'adresse exacte de <em>n'importe quelle</em> annonce immobilière</h1>
+        <p>Trouvimmo retrouve l'adresse d'un bien à partir de son DPE. Compatible Leboncoin, SeLoger, Bien'ici et plus. Installez, cliquez, trouvez.</p>
+        <div class="hero-actions">
+            <a href="#pricing" class="btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 16 16 12 12 8"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Installer gratuitement
+            </a>
+            <a href="#how" class="btn-secondary">Comment ça marche</a>
+        </div>
+    </section>
+
+    <!-- DEMO -->
+    <div class="demo-section">
+        <div class="demo-card">
+            <div class="demo-header">
+                <div class="demo-dot"></div>
+                <div class="demo-dot"></div>
+                <div class="demo-dot"></div>
+                <div class="demo-url">leboncoin.fr/ad/appartement-3-pieces-nantes</div>
+            </div>
+            <div class="demo-body">
+                <div class="demo-annonce">
+                    <div class="demo-annonce-title">Appartement 3 pièces — Nantes</div>
+                    <div class="demo-annonce-price">189 000 €</div>
+                    <div class="demo-criteria">
+                        <span class="demo-tag">🏠 3 pièces</span>
+                        <span class="demo-tag">📐 62 m²</span>
+                        <span class="demo-tag">📍 44000 Nantes</span>
+                        <span class="demo-tag">🏗️ 1975</span>
+                    </div>
+                    <div class="demo-dpe">
+                        <div class="dpe-bar dpe-a">A</div>
+                        <div class="dpe-bar dpe-b">B</div>
+                        <div class="dpe-bar dpe-c">C</div>
+                        <div class="dpe-bar dpe-d active">D — 195 kWh/m².an</div>
+                        <div class="dpe-bar dpe-e">E</div>
+                        <div class="dpe-bar dpe-f">F</div>
+                        <div class="dpe-bar dpe-g">G</div>
+                    </div>
+                </div>
+                <div class="demo-panel">
+                    <div class="demo-panel-title">
+                        📍 Trouvimmo
+                        <span class="confidence-badge">97% match</span>
+                    </div>
+                    <div class="demo-result-address">12 rue du Maréchal Joffre<br>44000 Nantes</div>
+                    <div class="demo-result-details">
+                        <div class="demo-result-row">
+                            <span class="demo-result-label">Surface DPE</span>
+                            <span class="demo-result-value">62,3 m²</span>
+                        </div>
+                        <div class="demo-result-row">
+                            <span class="demo-result-label">DPE réalisé le</span>
+                            <span class="demo-result-value">14/03/2024</span>
+                        </div>
+                        <div class="demo-result-row">
+                            <span class="demo-result-label">N° DPE</span>
+                            <span class="demo-result-value">2434E0XXXXX</span>
+                        </div>
+                    </div>
+                    <div class="demo-result-links">
+                        <a href="#" class="demo-link">🗺️ Voir sur Google Maps</a>
+                        <a href="#" class="demo-link">🏛️ Consulter le DPE complet</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="section reveal" id="how">
+        <div class="section-label">Comment ça marche</div>
+        <h2>3 secondes pour trouver l'adresse</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Ouvrez une annonce</h3>
+                <p>Naviguez normalement sur Leboncoin, SeLoger, Bien'ici ou PAP. Trouvimmo détecte automatiquement les données DPE de l'annonce.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Cliquez sur le bouton</h3>
+                <p>Un bouton 📍 apparaît sur la page. Cliquez dessus pour lancer la recherche dans la base de données publique des DPE (ADEME).</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Obtenez l'adresse</h3>
+                <p>L'adresse exacte s'affiche avec un score de confiance, un lien Google Maps et le DPE complet du logement.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPATIBLE SITES -->
+    <section class="section reveal">
+        <div class="section-label">Compatibilité</div>
+        <h2>Fonctionne avec vos sites préférés</h2>
+        <div class="sites-grid">
+            <div class="site-badge">🟠 Leboncoin</div>
+            <div class="site-badge">🔵 SeLoger</div>
+            <div class="site-badge">🟢 Bien'ici</div>
+            <div class="site-badge">🟡 PAP</div>
+            <div class="site-badge">🔴 Logic-Immo</div>
+        </div>
+    </section>
+
+    <!-- WHY IT WORKS -->
+    <section class="section reveal">
+        <div class="section-label">Pourquoi ça marche</div>
+        <h2>Le DPE est une empreinte unique</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">🏷️</div>
+                <h3>Données publiques</h3>
+                <p>Chaque DPE réalisé en France est enregistré dans une base de données publique de l'ADEME avec l'adresse complète du bien.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">🔗</div>
+                <h3>Croisement intelligent</h3>
+                <p>En combinant la classe énergie, la surface, la localisation et les émissions GES, on identifie précisément le DPE correspondant.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">🎯</div>
+                <h3>Score de confiance</h3>
+                <p>Chaque résultat est accompagné d'un score de confiance pour que vous sachiez exactement à quel point le match est fiable.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section reveal" id="pricing">
+        <div class="section-label">Tarif</div>
+        <h2>Simple et accessible</h2>
+        <div class="pricing-card">
+            <div class="pricing-popular">Le plus populaire</div>
+            <div class="pricing-free">Commencez avec <strong>5 recherches gratuites</strong> — sans engagement</div>
+            <div class="pricing-price">9,99€</div>
+            <div class="pricing-period">par an · TTC · recherches illimitées</div>
+            <ul class="pricing-features">
+                <li>Recherches illimitées sur tous les sites</li>
+                <li>Score de confiance détaillé</li>
+                <li>Lien Google Maps et Street View</li>
+                <li>Accès au DPE complet (ADEME)</li>
+                <li>Utilisable sur 5 appareils</li>
+                <li>Mises à jour incluses</li>
+            </ul>
+            <a href="#" class="btn-primary pricing-cta">
+                Installer l'extension gratuitement
+            </a>
+            <p class="pricing-note">Pas de carte bancaire requise pour les 5 recherches gratuites</p>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section reveal" id="faq">
+        <div class="section-label">Questions fréquentes</div>
+        <h2>Tout ce que vous devez savoir</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question">Est-ce légal ?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">Oui. Les données DPE sont des données publiques, mises à disposition par l'ADEME en open data conformément à l'article L134-4-2 du Code de la construction et de l'habitation. Trouvimmo ne fait que croiser des informations déjà accessibles publiquement.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Ça marche à chaque fois ?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">Dans la grande majorité des cas, oui. Le taux de réussite dépend des informations disponibles sur l'annonce. Plus il y a de détails (classe énergie, GES, surface exacte), plus le matching est précis. Le score de confiance vous indique la fiabilité du résultat.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Est-ce que mes données sont collectées ?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">Non. Trouvimmo fonctionne entièrement dans votre navigateur. Aucune donnée n'est envoyée à nos serveurs — il n'y en a pas. Les requêtes vont directement de votre navigateur vers l'API publique de l'ADEME.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Pourquoi 9,99€/an et pas gratuit ?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">Les 5 premières recherches sont gratuites pour que vous puissiez tester. L'abonnement annuel finance le développement et la maintenance de l'extension (adaptation aux changements des sites, améliorations de l'algorithme, support). À moins d'1€/mois, c'est le prix d'un café pour un outil qui peut vous faire économiser des milliers d'euros sur un achat immobilier.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Je peux l'utiliser sur plusieurs ordinateurs ?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">Oui, votre licence est utilisable sur 5 appareils simultanément. Vous recevez une clé de licence par email après l'achat, qu'il suffit d'entrer dans l'extension sur chaque appareil.</div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Comment annuler mon abonnement ?</button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">Vous pouvez annuler à tout moment depuis le portail client accessible dans l'email de confirmation. L'accès reste actif jusqu'à la fin de la période payée. Remboursement possible sous 14 jours si vous n'êtes pas satisfait.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <span class="footer-copy">© 2025 Trouvimmo. Tous droits réservés.</span>
+            <div class="footer-links">
+                <a href="mailto:contact@trouvimmo.fr">Contact</a>
+                <a href="#">CGV</a>
+                <a href="#">Confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ toggle
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const wasActive = item.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                if (!wasActive) item.classList.add('active');
+            });
+        });
+
+        // Scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
