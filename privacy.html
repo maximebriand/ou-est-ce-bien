@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Politique de confidentialit&eacute; &mdash; O&ugrave;EstCeBien</title>
+  <meta name="description" content="Politique de confidentialit&eacute; de l'extension O&ugrave;EstCeBien.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #FAFAF8;
+      --surface: #FFFFFF;
+      --text: #1A1A18;
+      --text-secondary: #6B6B64;
+      --accent: #2D6A4F;
+      --accent-light: #40916C;
+      --border: #E8E8E2;
+    }
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back-link { display: inline-block; margin-bottom: 32px; font-size: 0.9rem; color: var(--text-secondary); }
+    .back-link:hover { color: var(--text); }
+    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 40px; }
+    h2 { font-size: 1.1rem; font-weight: 700; margin-top: 36px; margin-bottom: 12px; color: var(--accent); }
+    p, li { font-size: 0.95rem; margin-bottom: 12px; }
+    ul { padding-left: 20px; margin-bottom: 12px; }
+    li { margin-bottom: 6px; }
+    strong { font-weight: 600; }
+    .footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">&larr; Retour au site</a>
+
+    <h1>Politique de confidentialit&eacute;</h1>
+    <p class="subtitle">O&ugrave;EstCeBien &mdash; Extension de navigateur<br>Derni&egrave;re mise &agrave; jour : 11 f&eacute;vrier 2026</p>
+
+    <p>O&ugrave;EstCeBien est une extension de navigateur &eacute;dit&eacute;e par Maxime Briand.<br>Contact : <a href="mailto:contact@maximebriand.fr">contact@maximebriand.fr</a></p>
+
+    <h2>1. Donn&eacute;es collect&eacute;es</h2>
+    <p>O&ugrave;EstCeBien <strong>ne collecte aucune donn&eacute;e personnelle</strong>.</p>
+    <p>L'extension ne dispose d'aucun serveur backend. Aucune information n'est envoy&eacute;e &agrave; l'&eacute;diteur. Il n'y a aucun syst&egrave;me d'analytics, de tracking, ni de t&eacute;l&eacute;m&eacute;trie.</p>
+
+    <h2>2. Donn&eacute;es trait&eacute;es localement</h2>
+    <p>Les donn&eacute;es suivantes sont trait&eacute;es exclusivement dans votre navigateur et stock&eacute;es localement :</p>
+    <ul>
+      <li>Donn&eacute;es DPE extraites des annonces consult&eacute;es (classe &eacute;nergie, surface, code postal, date DPE)</li>
+      <li>Cache de propri&eacute;t&eacute;s pour acc&eacute;l&eacute;rer les recherches ult&eacute;rieures (max. 500 entr&eacute;es, supprim&eacute;es apr&egrave;s 30 jours)</li>
+      <li>Compteur de recherches (version gratuite)</li>
+      <li>Cl&eacute; de licence et identifiant d'instance (version Pro)</li>
+    </ul>
+    <p>Ces donn&eacute;es ne quittent jamais votre navigateur, sauf pour interroger les API publiques d&eacute;crites ci-dessous.</p>
+
+    <h2>3. API externes consult&eacute;es</h2>
+    <p>L'extension interroge exclusivement des API publiques fran&ccedil;aises pour fournir ses fonctionnalit&eacute;s :</p>
+    <ul>
+      <li><strong>ADEME</strong> (data.ademe.fr) &mdash; Base nationale des Diagnostics de Performance &Eacute;nerg&eacute;tique et des audits &eacute;nerg&eacute;tiques</li>
+      <li><strong>DVF / Opendatasoft</strong> (public.opendatasoft.com) &mdash; Demandes de Valeurs Fonci&egrave;res (transactions immobili&egrave;res)</li>
+      <li><strong>API Carto IGN</strong> (apicarto.ign.fr) &mdash; Donn&eacute;es cadastrales</li>
+      <li><strong>Bien'ici</strong> (bienici.com) &mdash; Enrichissement g&eacute;ographique des annonces</li>
+    </ul>
+    <p>Les requ&ecirc;tes envoy&eacute;es &agrave; ces API contiennent uniquement des crit&egrave;res de recherche techniques (classe &eacute;nergie, surface, code postal, coordonn&eacute;es GPS). Aucune donn&eacute;e personnelle n'est transmise.</p>
+
+    <h2>4. Paiement et licence</h2>
+    <p>Le paiement de la version Pro est g&eacute;r&eacute; int&eacute;gralement par <a href="https://www.lemonsqueezy.com" target="_blank" rel="noopener">Lemon Squeezy</a>, un prestataire tiers. O&ugrave;EstCeBien n'a acc&egrave;s &agrave; aucune donn&eacute;e bancaire. Seules la cl&eacute; de licence et l'adresse email associ&eacute;e sont &eacute;chang&eacute;es lors de l'activation.</p>
+    <p>La politique de confidentialit&eacute; de Lemon Squeezy s'applique pour le traitement des paiements : <a href="https://www.lemonsqueezy.com/privacy" target="_blank" rel="noopener">lemonsqueezy.com/privacy</a></p>
+
+    <h2>5. Permissions du navigateur</h2>
+    <p>L'extension demande les permissions suivantes :</p>
+    <ul>
+      <li><strong>activeTab / tabs</strong> &mdash; D&eacute;tecter les annonces immobili&egrave;res sur l'onglet actif</li>
+      <li><strong>sidePanel</strong> &mdash; Afficher le panneau lat&eacute;ral de r&eacute;sultats</li>
+      <li><strong>storage</strong> &mdash; Stocker les pr&eacute;f&eacute;rences et le cache localement</li>
+      <li><strong>alarms</strong> &mdash; Revalider p&eacute;riodiquement la licence Pro</li>
+      <li><strong>Acc&egrave;s aux sites immobiliers</strong> &mdash; Extraire les donn&eacute;es DPE des annonces (Leboncoin, SeLoger, PAP, Bien'ici, Logic-Immo, Century 21, Safti, IAD France, ParuVendu, Ouest France Immo, Notaires Immobilier)</li>
+    </ul>
+
+    <h2>6. Suppression des donn&eacute;es</h2>
+    <p>La d&eacute;sinstallation de l'extension supprime automatiquement toutes les donn&eacute;es stock&eacute;es localement. Vous pouvez &eacute;galement effacer les donn&eacute;es manuellement via les param&egrave;tres de votre navigateur.</p>
+    <p>Pour d&eacute;sactiver votre licence Pro (lib&eacute;rer un emplacement d'appareil), utilisez le bouton de d&eacute;sactivation dans l'extension avant de la d&eacute;sinstaller.</p>
+
+    <h2>7. Modifications</h2>
+    <p>Cette politique peut &ecirc;tre mise &agrave; jour. La date de derni&egrave;re mise &agrave; jour est indiqu&eacute;e en haut du document. En cas de changement substantiel, une notification sera affich&eacute;e dans l'extension.</p>
+
+    <h2>8. Contact</h2>
+    <p>Pour toute question relative &agrave; la confidentialit&eacute; :<br>Maxime Briand &mdash; <a href="mailto:contact@maximebriand.fr">contact@maximebriand.fr</a></p>
+
+    <div class="footer">
+      <p>&copy; 2026 O&ugrave;EstCeBien &mdash; Maxime Briand</p>
+    </div>
+  </div>
+</body>
+</html>
