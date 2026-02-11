@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trouvimmo — Retrouvez l'adresse exacte de n'importe quelle annonce immobilière</title>
-    <meta name="description" content="Extension Chrome qui retrouve l'adresse exacte d'un bien immobilier à partir de son DPE. Compatible Leboncoin, SeLoger, Bien'ici, PAP.">
+    <title>OùEstCeBien — Retrouvez l'adresse exacte de n'importe quelle annonce immobilière</title>
+    <meta name="description" content="Extension navigateur qui retrouve l'adresse exacte d'un bien immobilier à partir de son DPE. Compatible Leboncoin, SeLoger, Bien'ici, PAP et 7 autres sites. Ventes DVF, coût énergie, cadastre.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&display=swap" rel="stylesheet">
     <style>
@@ -698,16 +698,16 @@
     <nav>
         <a href="#" class="logo">
             <div class="logo-icon">📍</div>
-            Trouvimmo
+            OùEstCeBien
         </a>
         <a href="#pricing" class="nav-cta">Installer l'extension</a>
     </nav>
 
     <!-- HERO -->
     <section class="hero">
-        <div class="hero-badge">🔍 Extension Chrome gratuite</div>
+        <div class="hero-badge">🔍 Extension gratuite — Chrome, Firefox, Edge, Opera, Safari</div>
         <h1>L'adresse exacte de <em>n'importe quelle</em> annonce immobilière</h1>
-        <p>Trouvimmo retrouve l'adresse d'un bien à partir de son DPE. Compatible Leboncoin, SeLoger, Bien'ici et plus. Installez, cliquez, trouvez.</p>
+        <p>OùEstCeBien retrouve l'adresse d'un bien à partir de son DPE, plus le coût énergie, les ventes récentes et le cadastre. Compatible avec 11 sites immobiliers.</p>
         <div class="hero-actions">
             <a href="#pricing" class="btn-primary">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 16 16 12 12 8"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
@@ -748,7 +748,7 @@
                 </div>
                 <div class="demo-panel">
                     <div class="demo-panel-title">
-                        📍 Trouvimmo
+                        📍 OùEstCeBien
                         <span class="confidence-badge">97% match</span>
                     </div>
                     <div class="demo-result-address">12 rue du Maréchal Joffre<br>44000 Nantes</div>
@@ -783,7 +783,7 @@
             <div class="step">
                 <div class="step-number">1</div>
                 <h3>Ouvrez une annonce</h3>
-                <p>Naviguez normalement sur Leboncoin, SeLoger, Bien'ici ou PAP. Trouvimmo détecte automatiquement les données DPE de l'annonce.</p>
+                <p>Naviguez normalement sur Leboncoin, SeLoger, Bien'ici ou l'un des 11 sites supportés. OùEstCeBien détecte automatiquement les données DPE.</p>
             </div>
             <div class="step">
                 <div class="step-number">2</div>
@@ -803,11 +803,17 @@
         <div class="section-label">Compatibilité</div>
         <h2>Fonctionne avec vos sites préférés</h2>
         <div class="sites-grid">
-            <div class="site-badge">🟠 Leboncoin</div>
-            <div class="site-badge">🔵 SeLoger</div>
-            <div class="site-badge">🟢 Bien'ici</div>
-            <div class="site-badge">🟡 PAP</div>
-            <div class="site-badge">🔴 Logic-Immo</div>
+            <div class="site-badge">Leboncoin</div>
+            <div class="site-badge">SeLoger</div>
+            <div class="site-badge">Bien'ici</div>
+            <div class="site-badge">PAP</div>
+            <div class="site-badge">Logic-Immo</div>
+            <div class="site-badge">Century 21</div>
+            <div class="site-badge">Safti</div>
+            <div class="site-badge">IAD France</div>
+            <div class="site-badge">ParuVendu</div>
+            <div class="site-badge">Ouest France Immo</div>
+            <div class="site-badge">Notaires Immo</div>
         </div>
     </section>
 
@@ -834,6 +840,29 @@
         </div>
     </section>
 
+    <!-- ENRICHMENT -->
+    <section class="section reveal">
+        <div class="section-label">Bien plus qu'une adresse</div>
+        <h2>Toutes les infos pour décider</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">💰</div>
+                <h3>Coût énergie estimé</h3>
+                <p>Estimation mensuelle du chauffage basée sur le DPE, la surface et le type d'énergie. Tarifs 2025.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">📊</div>
+                <h3>Ventes récentes (DVF)</h3>
+                <p>Historique des transactions à la même adresse, même rue et dans le quartier. Prix au m² par classe DPE.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">🔧</div>
+                <h3>Points d'amélioration</h3>
+                <p>Qualité d'isolation par poste, déperditions thermiques et recommandations de travaux issues de l'audit énergétique.</p>
+            </div>
+        </div>
+    </section>
+
     <!-- PRICING -->
     <section class="section reveal" id="pricing">
         <div class="section-label">Tarif</div>
@@ -844,12 +873,13 @@
             <div class="pricing-price">9,99€</div>
             <div class="pricing-period">par an · TTC · recherches illimitées</div>
             <ul class="pricing-features">
-                <li>Recherches illimitées sur tous les sites</li>
-                <li>Score de confiance détaillé</li>
-                <li>Lien Google Maps et Street View</li>
-                <li>Accès au DPE complet (ADEME)</li>
+                <li>Recherches illimitées sur 11 sites</li>
+                <li>Adresse exacte + Google Maps</li>
+                <li>Coût énergie estimé et diagnostic isolation</li>
+                <li>Ventes récentes DVF et prix au m²</li>
+                <li>Cadastre et DPE du bâtiment</li>
                 <li>Utilisable sur 5 appareils</li>
-                <li>Mises à jour incluses</li>
+                <li>Mises à jour et nouveaux sites inclus</li>
             </ul>
             <a href="#" class="btn-primary pricing-cta">
                 Installer l'extension gratuitement
@@ -866,7 +896,7 @@
             <div class="faq-item">
                 <button class="faq-question">Est-ce légal ?</button>
                 <div class="faq-answer">
-                    <div class="faq-answer-inner">Oui. Les données DPE sont des données publiques, mises à disposition par l'ADEME en open data conformément à l'article L134-4-2 du Code de la construction et de l'habitation. Trouvimmo ne fait que croiser des informations déjà accessibles publiquement.</div>
+                    <div class="faq-answer-inner">Oui. Les données DPE sont des données publiques, mises à disposition par l'ADEME en open data conformément à l'article L134-4-2 du Code de la construction et de l'habitation. OùEstCeBien ne fait que croiser des informations déjà accessibles publiquement.</div>
                 </div>
             </div>
             <div class="faq-item">
@@ -878,7 +908,7 @@
             <div class="faq-item">
                 <button class="faq-question">Est-ce que mes données sont collectées ?</button>
                 <div class="faq-answer">
-                    <div class="faq-answer-inner">Non. Trouvimmo fonctionne entièrement dans votre navigateur. Aucune donnée n'est envoyée à nos serveurs — il n'y en a pas. Les requêtes vont directement de votre navigateur vers l'API publique de l'ADEME.</div>
+                    <div class="faq-answer-inner">Non. OùEstCeBien fonctionne entièrement dans votre navigateur. Aucune donnée n'est envoyée à nos serveurs — il n'y en a pas. Les requêtes vont directement de votre navigateur vers l'API publique de l'ADEME.</div>
                 </div>
             </div>
             <div class="faq-item">
@@ -905,11 +935,10 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-inner">
-            <span class="footer-copy">© 2025 Trouvimmo. Tous droits réservés.</span>
+            <span class="footer-copy">© 2026 OùEstCeBien — Maxime Briand</span>
             <div class="footer-links">
-                <a href="mailto:contact@trouvimmo.fr">Contact</a>
-                <a href="#">CGV</a>
-                <a href="#">Confidentialité</a>
+                <a href="mailto:contact@maximebriand.fr">Contact</a>
+                <a href="privacy.html">Confidentialité</a>
             </div>
         </div>
     </footer>
